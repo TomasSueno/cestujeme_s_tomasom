@@ -1,0 +1,71 @@
+/* Main page */
+
+.mainPageFirstPhoto {
+  position: absolute;
+  top: 50px;
+  max-width: 100%;
+  max-height: calc(100vh - 50px);
+  z-index: -1;
+}
+
+.quoteBox {
+  padding: 9px;
+  border-radius: 15px;
+  max-width: 80%;
+  width: 540px;
+  background-image: linear-gradient(138deg, rgb(0, 26, 110), rgb(0, 24, 54));
+  margin: 80px auto;
+}
+
+  .quote {
+    text-align: center;
+    font-size: 22px;
+    color: white;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .authorOfQuote {
+    display: inline;
+    margin-left: 80%;
+    font-size: 18px;
+    color: rgb(245, 245, 245);
+  }
+
+.titleContent {
+  margin-top: 100px;
+}
+
+.titleContent h1 {
+  color: rgb(237, 252, 255);
+  text-align: center;
+}
+
+.createBlogButton {
+  margin-top: 20px;
+  border-radius: 8px 12px;
+  border-color: rgb(247, 247, 247);
+  background-color: aquamarine;
+  color: blue;
+  padding: 3px;
+  font-size: 1.1rem;
+  width: 104px;
+  cursor: pointer;
+}
+
+.blogLink {
+  position: static;
+  margin-left: calc(50% - 50px);
+}
+
+/* @media only screen and(max-width: 700px) {
+.quoteBox {
+  max-width: 400px;
+}
+}
+
+@media only screen and(max-width: 500px) {
+.quoteBox {
+  max-width: 200px;
+}
+} */
