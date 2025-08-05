@@ -1,0 +1,27 @@
+.questionBox {
+    transform: rotate(-0.3deg);
+    border: 1px solid rgb(0, 55, 132);
+    border-radius: 20px 5px 300px 20px;
+    margin: 80px 30px;
+    padding: 15px;
+    background-color: rgb(15, 54, 103);
+    animation-name: rotation;
+    animation-duration: 1s;
+}
+
+.question {
+    display: inline;
+    background-color: rgb(0, 4, 84);
+    color: white;
+    border-radius: 15px;
+}
+
+.answer {
+    margin-top: 5px;
+    color: rgb(248, 249, 255)
+}
+
+@keyframes rotation {
+    100% {transform: rotate(360deg);}
+    /* to {transform: rotate(300deg);} */
+}
