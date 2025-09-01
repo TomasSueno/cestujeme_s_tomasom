@@ -24,6 +24,10 @@ return (
 
     <NavBar />
 
+    <main>
+
+    <section className="home">
+
     <div className="quoteBox">
     <p className="quote">"{quote}"</p>
     <p className="authorOfQuote">- CST</p>
@@ -34,6 +38,12 @@ return (
     <h1>Create blog for us. It is for free!!!</h1>
     <Link href="own_blogs" className="blogLink"><button className="createBlogButton">Create Blog</button></Link>
     </div>
+
+    </section>
+
+    {/* section. */}
+
+    </main>
 
     </>
     )
