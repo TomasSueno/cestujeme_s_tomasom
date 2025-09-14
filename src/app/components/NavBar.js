@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 // import { useRef } from 'react'
 import Image from 'next/image'
-import registrationIcon from "../resources/images/registration_icon.png"
+import registrationIcon from "/resources/images/registration_icon.png"
 
 
 
