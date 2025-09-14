@@ -1,6 +1,102 @@
 /* Main page */
 
-.mainPageFirstPhoto {
+main button {
+  cursor: pointer;
+}
+
+.bookingSection {
+  width: 95vw;
+  margin: 75px auto;
+}
+
+.choosing {
+  display: flex;
+}
+
+.choosing button {
+  background-color: rgb(248, 161, 0);
+  height: 30px;
+  width: 150px;
+  display: block;
+  padding-top: 5px;
+  border-radius: 5px 5px 0 0;
+  text-align: center;
+  border: none;
+  margin-right: 5px;
+}
+
+.choosing .accommodation,
+.choosing .tours {
+  background-color: rgb(255, 177, 32);
+}
+
+.rezervation {
+  background-color: rgb(255, 177, 32);
+  height: 100%;
+  margin: auto;
+  display: grid;
+  border-radius: 0 5px 5px 5px;
+}
+
+.rezervation input {
+  height: 50px;
+  margin: 25px 10px;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 6px;
+  min-width: 180px;
+}
+
+.rezervation button {
+  background-color: rgb(40, 40, 139);
+  color: white;
+  border-radius: 10px;
+  font-size: 20px;
+  height: 50px;
+  margin: auto;
+  margin: 25px 10px;
+  min-width: 180px;
+  transition-duration: 0.2s;
+}
+
+.rezervation button:hover {
+  background-color: rgb(9, 9, 198);
+}
+
+.rezervation .searchPlaceInput {
+  margin-bottom: 20px;
+}
+
+.searchPlacesDiv {
+  color: white;
+  background-color: rgb(9, 9, 198);
+  padding: 8px;
+  border-top: 2px solid white;
+  cursor: pointer;
+}
+
+.searchPlacesDiv:hover {
+  background-color: rgb(40, 40, 139);
+}
+
+.announcmentNoHotels {
+  background-color: rgb(198, 9, 9);
+  color: white;
+  text-align: center;
+  padding: 8px;
+}
+
+@media only screen and (max-width: 1100px) {
+.rezervation input {
+  margin: 32px 10px 0px 10px;
+}
+
+.rezervation button {
+  margin: 32px 10px;
+}
+}
+
+/* .mainPageFirstPhoto {
   position: absolute;
   top: 50px;
   max-width: 100%;
@@ -56,7 +152,7 @@
 .blogLink {
   position: static;
   margin-left: calc(50% - 50px);
-}
+} */
 
 /* @media only screen and(max-width: 700px) {
 .quoteBox {
