@@ -1,4 +1,4 @@
-    export async function GetToken() {
+export async function GetToken() {
             const res = await fetch("https://test.api.amadeus.com/v1/security/oauth2/token", {
                 method: "POST",
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
@@ -9,6 +9,5 @@
                 })
             })
             const data = await res.json();
-            console.log(data.access_token)
             return data.access_token;
     }

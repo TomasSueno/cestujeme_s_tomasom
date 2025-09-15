@@ -11,16 +11,16 @@ import firstPhoto from '../resources/images/main_page_first_photo.jpg'
 
 export default function Uvodna () {
 
-const [choosePlace, setChoosePlace] = useState([])
 const [accessToken, setAccessToken] = useState("")
 const [hotelData, setHotelData] = useState([])
 const [concreteHotel, setConcreteHotel] = useState("")
 const [toggleHotelsInput, setToggleHotelsInput] = useState(false)
 const [chooseTourPlace, setChooseTourPlace] = useState("")
+const [loading, setLoading] = useState(false)
 
     // get text from div to input(hotel input)
-    function changeHotelInputText(name, town) {
-        setConcreteHotel(name + ", " + town)
+    function changeHotelInputText(name) {
+        setConcreteHotel(name)
     }
 
 // get token from amadeus app
@@ -44,16 +44,19 @@ const [chooseTourPlace, setChooseTourPlace] = useState("")
     // get top 10 results from searching hotels
 
         useEffect(() => {
-        if(!accessToken) return
-        const getHotels = async() => {
-            const res = await fetch("https://test.api.amadeus.com/v1/reference-data/locations/hotel?keyword=" + choosePlace + "&subType=HOTEL_LEISURE&max=10", {
+        if(!accessToken) return;
+        if(concreteHotel.length < 3) return;
+        const timeoutId = setTimeout(async () => {
+            const res = await fetch("https://test.api.amadeus.com/v1/reference-data/locations/hotel?keyword=" + concreteHotel.split(",") + "&subType=HOTEL_LEISURE&max=10", {
                 headers: {Authorization: "Bearer " + accessToken}
             })
-        const data = await res.json()
-        setHotelData(data.data)
-        }
-        getHotels()
-    }, [accessToken, choosePlace])
+            const data = await res.json()
+            setHotelData(data.data)
+            setLoading(false)
+        }, 250)
+        return () => clearTimeout(timeoutId)
+        
+    }, [accessToken, concreteHotel])
 
     function checkToggleHotelsInput(isOpen) {
         setToggleHotelsInput(isOpen)
@@ -86,23 +89,25 @@ return (
         </div>
             {rezervationType == "accommodation" ? (
             <div className="rezervation">
-                <input className="searchPlaceInput" type='text' name="accommodation_place" value={concreteHotel} placeholder='Where to?'
-                    onFocus={() => checkToggleHotelsInput(true)} 
+                <input maxLength="100" className="searchPlaceInput" type="text" name="accommodation_place" value={concreteHotel} placeholder='Where to?'
+                    onFocus={() => checkToggleHotelsInput(true)}
+                    onBlur={() => checkToggleHotelsInput(false)}
                     onChange={(event) => { 
-                    setConcreteHotel(event.target.value)
-                    setChoosePlace(event.target.value)}
+                    setConcreteHotel(event.target.value)}
                     }></input>
                 {
-                toggleHotelsInput ? (
+                toggleHotelsInput === true && loading === false ? (
+                concreteHotel.length >= 3 && toggleHotelsInput === true ? (
                 hotelData ? (
                 hotelData.map(prop => (
-                    <div key={prop.id} className="searchPlacesDiv" onClick={() => {changeHotelInputText(prop.name, prop.address.cityName);
+                    <div key={prop.id} className="searchPlacesDiv" onMouseDown={() => {changeHotelInputText(prop.name);
                     (checkToggleHotelsInput(false))}}>
-                        <p>{prop.name}, {prop.address.cityName}</p>
+                        <p>{prop.name} <span className="spanShowCityName">( {prop.address.cityName}, {prop.address.countryCode} )</span></p>
                     </div>
                 ))
-            ) : choosePlace.length >= 3 ? <p className="announcmentNoHotels">There is no hotel like that one</p> : <></>
-        ) : <></>
+            ) : <p className="announcmentNoHotels">There is no hotel with that name</p>
+        ) : <p className="announcmentNoHotels">Please write here at least 3 characters</p>
+    ) : <></>
                 }
 
                 <input placeholder="Departing - Returning" className="chooseDateInput"></input>

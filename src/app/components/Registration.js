@@ -27,7 +27,7 @@ export default function Registration() {
 
             <label>Password</label>
             <input type="password" required></input>
-            <Image onClick={changeImage} src={passwordIcon} width={10} height={10} alt="hidden password"></Image>
+            {/* <Image onClick={changeImage} src={passwordIcon} width={10} height={10} alt="hidden password"></Image> */}
 
             <button type="submit">Sign in</button>
             <Link href="\"><button>Registrate</button></Link>
