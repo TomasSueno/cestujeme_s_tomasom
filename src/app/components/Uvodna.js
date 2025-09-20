@@ -7,59 +7,76 @@ import NavBar from './NavBar'
 import Head from 'next/head';
 import Image from 'next/image'
 import firstPhoto from '../resources/images/main_page_first_photo.jpg'
+import Form from "next/form"
 
 
 export default function Uvodna () {
 
-const [accessToken, setAccessToken] = useState("")
-const [hotelData, setHotelData] = useState([])
-const [concreteHotel, setConcreteHotel] = useState("")
+const [rezervationType, setRezervationType] = useState('accommodation')
 const [toggleHotelsInput, setToggleHotelsInput] = useState(false)
-const [chooseTourPlace, setChooseTourPlace] = useState("")
 const [loading, setLoading] = useState(false)
+const [hotelData, setHotelData] = useState([])
+
+const [form, setForm] = useState({
+    concreteHotel: "",
+    chooseTourPlace: ""
+})
+
+function updateForm(field, value) {
+    return setForm(prev => ({...prev, [field]: value}))
+}
+
+// get top 10 results of hotels by match
+    async function fetchHotels(keyword) {
+        const res = await fetch("/api/hotels?keyword=" + encodeURIComponent(keyword))
+        return res.json()
+    }
+    
+    useEffect(() => {
+        if(form.concreteHotel.length < 3) return
+        const timeoutId = setTimeout(async () => {
+            try {
+                setLoading(true)
+                const data = await fetchHotels(form.concreteHotel)
+                setHotelData(data)
+            } catch(error) {
+                console.error("Search failed: ", error)
+            } finally {
+                setLoading(false)
+            }
+            }, 300)
+         return () => clearTimeout(timeoutId)
+    }, [form.concreteHotel])
+
+    // check if search places input is focused 
+    function checkToggleHotelsInput(isOpen) {
+        setToggleHotelsInput(isOpen)
+    }
 
     // get text from div to input(hotel input)
     function changeHotelInputText(name) {
-        setConcreteHotel(name)
+        updateForm("concreteHotel", name)
     }
 
-// get token from amadeus app
-    useEffect(() => {
-        const getToken = async() => {
-            const res = await fetch("https://test.api.amadeus.com/v1/security/oauth2/token", {
-                method: "POST",
-                headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: new URLSearchParams({
-                    grant_type: "client_credentials",
-                    client_id: "JpnSDsTiQyPKOp0pVWGkDmLkXID896IF",
-                    client_secret: "oW1BkwbHcXxCMOia"  
-                })
-            })
-            const data = await res.json()
-            setAccessToken(data.access_token)
-        }
-        getToken()
-    }, [])
+    // check type of form(accomodation, tours)
+    function checkRezervationType(type) {
+    setRezervationType(type);
+    }
 
-    // get top 10 results from searching hotels
-
-        useEffect(() => {
-        if(!accessToken) return;
-        if(concreteHotel.length < 3) return;
-        const timeoutId = setTimeout(async () => {
-            const res = await fetch("https://test.api.amadeus.com/v1/reference-data/locations/hotel?keyword=" + concreteHotel.split(",") + "&subType=HOTEL_LEISURE&max=10", {
-                headers: {Authorization: "Bearer " + accessToken}
-            })
-            const data = await res.json()
-            setHotelData(data.data)
-            setLoading(false)
-        }, 250)
-        return () => clearTimeout(timeoutId)
-        
-    }, [accessToken, concreteHotel])
-
-    function checkToggleHotelsInput(isOpen) {
-        setToggleHotelsInput(isOpen)
+    // Show hotel suggestions dropdown to user
+    function HotelSuggestions({ hotels, selectHotel, closeDropdowns, inputValue, loading, inputFocus }) {
+        if(!inputFocus) return null
+        if(loading) return <p className="announcmentNoHotels">Ta toto sa loadinguje</p>
+        if(inputValue.trim().length < 3) return <p className="announcmentNoHotels">Please write here at least 3 characters.</p>
+        if(!Array.isArray(hotels) || hotels.length === 0) return <p className="announcmentNoHotels">There is no hotel with that name. <span>Call us and we find what you need <span className="telNumber">+421 940 234 669</span>.</span></p>
+            return hotels.map(prop => (
+            <div key={prop.id} className="searchPlacesDiv" onMouseDown={() => {
+            selectHotel(prop.name);
+            closeDropdowns()
+            }}>
+                <p>{prop.name} <span className="spanShowCityName">( {prop.address.cityName}, {prop.address.countryCode} )</span></p>
+            </div>
+        ))
     }
 
 // const arrOfQuotes = ["Cestovanie s Tomášom = najlepšie cestovanie", 
@@ -68,12 +85,6 @@ const [loading, setLoading] = useState(false)
 //     "Kvalitné služby za kvalitný poplatok",
 //     "Tý najlepší cestovateľský odborníci pracujú s Tomášom"]
 // let quote = arrOfQuotes[Math.floor(Math.random()*arrOfQuotes.length)]
-
-const [rezervationType, setRezervationType] = useState('accommodation');
-
-function checkRezervationType(type) {
-    setRezervationType(type);
-}
 
 return (
     <>
@@ -87,36 +98,27 @@ return (
         <button className={rezervationType == "accommodation" ? "accommodation" : ""} onClick={() => checkRezervationType("accommodation")}>Accommodation</button>
         <button className={rezervationType == "tours" ? "tours" : ""} onClick={() => checkRezervationType("tours")}>Tours</button>        
         </div>
+
             {rezervationType == "accommodation" ? (
-            <div className="rezervation">
-                <input maxLength="100" className="searchPlaceInput" type="text" name="accommodation_place" value={concreteHotel} placeholder='Where to?'
+            <Form className="rezervation">
+                <input maxLength="100" className="searchPlaceInput" type="text" name="accommodation_place" value={form.concreteHotel} placeholder='Where to?' required
                     onFocus={() => checkToggleHotelsInput(true)}
                     onBlur={() => checkToggleHotelsInput(false)}
                     onChange={(event) => { 
-                    setConcreteHotel(event.target.value)}
+                    updateForm("concreteHotel", event.target.value)}
                     }></input>
-                {
-                toggleHotelsInput === true && loading === false ? (
-                concreteHotel.length >= 3 && toggleHotelsInput === true ? (
-                hotelData ? (
-                hotelData.map(prop => (
-                    <div key={prop.id} className="searchPlacesDiv" onMouseDown={() => {changeHotelInputText(prop.name);
-                    (checkToggleHotelsInput(false))}}>
-                        <p>{prop.name} <span className="spanShowCityName">( {prop.address.cityName}, {prop.address.countryCode} )</span></p>
-                    </div>
-                ))
-            ) : <p className="announcmentNoHotels">There is no hotel with that name</p>
-        ) : <p className="announcmentNoHotels">Please write here at least 3 characters</p>
-    ) : <></>
-                }
+        {
+        <HotelSuggestions hotels={hotelData} selectHotel={changeHotelInputText} closeDropdowns={() => checkToggleHotelsInput(false)} inputValue={form.concreteHotel} loading={loading} inputFocus={toggleHotelsInput} />
+        }
 
                 <input placeholder="Departing - Returning" className="chooseDateInput"></input>
                 <input placeholder="How many people go with Tomas?" className="choosePeopleInput"></input>
                 <button>Find your hotel</button>
-            </div> 
+            </Form>
+
             ) : rezervationType == "tours" ? (
                 <div className="rezervation">
-                <input placeholder="Where to?" name="tours_place" value={chooseTourPlace} onChange={(event) => setChooseTourPlace(event.target.value)}></input>
+                <input placeholder="Where to?" name="tours_place" value={form.chooseTourPlace} onChange={(event) => updateForm("chooseTourPlace", event.target.value)}></input>
                 <input placeholder="Departing - Returning"></input> 
                 <input placeholder="How are you traveling?"></input>
                 <input placeholder="How many people go with Tomas?"></input>

@@ -71,8 +71,12 @@ main button {
   color: white;
   background-color: rgb(9, 9, 198);
   padding: 8px;
-  border-top: 2px solid white;
+  border-top: 1.5px solid white;
   cursor: pointer;
+}
+
+.searchPlacesDiv:nth-of-type(1) {
+  border-top: none;
 }
 
 .searchPlacesDiv:hover {
@@ -80,10 +84,26 @@ main button {
 }
 
 .announcmentNoHotels {
-  background-color: rgb(198, 9, 9);
-  color: white;
+  background-color: #FFD580;
+  color: #333;
   text-align: center;
-  padding: 8px;
+  padding: 12px;
+  max-width: 500px;
+  margin: auto;
+  border-radius: 10px;
+}
+
+.announcmentNoHotels span {
+  display: block;
+  margin-top: 7px;
+}
+
+.announcmentNoHotels span .telNumber {
+  display: inline;
+  color: #181818;
+  background-color: #ffc85b;
+  border-radius: 5px;
+  padding: 3px;
 }
 
 .spanShowCityName {
