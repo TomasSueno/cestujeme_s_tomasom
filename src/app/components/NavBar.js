@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 // import { useRef } from 'react'
 import Image from 'next/image'
-import registrationIcon from "../resources/images/registration_icon.png"
+// import registrationIcon from "../resources/images/registration_icon.png"
 
 
 
@@ -210,7 +210,7 @@ Contact
 <li className="registration_li">
 
 <Link href="/registration" className="registration_link">
-<Image src={registrationIcon} width={40} height={40} className="registration_icon" alt="Registration icon"></Image>
+{/* <Image src={registrationIcon} width={40} height={40} className="registration_icon" alt="Registration icon"></Image> */}
 </Link>
 </li>
 
