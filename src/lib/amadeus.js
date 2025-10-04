@@ -8,7 +8,6 @@ export async function getAccessToken() {
                     client_secret: "oW1BkwbHcXxCMOia"  
                 })
             })
-
             if(!res.ok) throw new Error("Token fetch failed: " + res.status + " " + await res.text())
 
             const data = await res.json();

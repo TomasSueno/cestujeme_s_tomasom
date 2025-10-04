@@ -19,7 +19,7 @@ export default function Registration() {
     }
    
     return(
-        <>
+        <div className="registrationPageBody">
             <form className="registration_form">
             <h1>Sign in</h1>
             <label>Email</label>
@@ -33,6 +33,6 @@ export default function Registration() {
             <Link href="\"><button>Registrate</button></Link>
            
         </form>
-        </>
+        </div>
     )
 }
