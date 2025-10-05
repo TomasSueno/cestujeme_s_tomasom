@@ -152,7 +152,8 @@ function updateFormArray(field, index, value) {
 
     function handleSubmit(e) {
         const errors = {}
-        if(form.concreteHotel.length < 3) errors.concreteHotelError = "Write at least 3 characters in the hotel search."
+        if(form.concreteHotel.length < 3) {errors.concreteHotelError = "Write at least 3 characters in the hotel search."}
+        else if(!Array.isArray(hotelData) || hotelData.length === 0) errors.concreteHotelError = "That text doesn't match destination. Please try to find some other destination."
         if(form.dateRange[0] === null || form.dateRange[1] === null) errors.dateError = "Choose complete date."
         if(form.ageOfChild.slice(0, form.children).some((el) => el === null)) errors.ageOfChildError = "Add how old are your youngsters."
         setSubmitErrors(errors)
