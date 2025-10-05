@@ -75,7 +75,7 @@ main button {
 
 .searchPlacesDiv {
   color: white;
-  background-color: rgb(9, 9, 198);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 8px;
   border-top: 1.5px solid white;
   cursor: pointer;
@@ -86,7 +86,7 @@ main button {
 }
 
 .searchPlacesDiv:hover {
-  background-color: rgb(40, 40, 139);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .announcmentNoHotels {

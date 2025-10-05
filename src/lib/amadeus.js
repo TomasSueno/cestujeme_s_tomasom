@@ -4,8 +4,8 @@ export async function getAccessToken() {
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 body: new URLSearchParams({
                     grant_type: "client_credentials",
-                    client_id: "JpnSDsTiQyPKOp0pVWGkDmLkXID896IF",
-                    client_secret: "oW1BkwbHcXxCMOia"  
+                    client_id: "jdNob3qfgGCiJj59LYF41D8fZHB1cV9r",
+                    client_secret: "X7BrgojrQFwblS75"  
                 })
             })
             if(!res.ok) throw new Error("Token fetch failed: " + res.status + " " + await res.text())
