@@ -1,13 +1,11 @@
 import Contact from "@/app/components/Contact";
-import NavBar from "../../components/NavBar";
+import NavBar from "@/app/components/NavBar";
 
 export default function contact() {
     return (
         <>
-<div>
-        <NavBar/>
-        <Contact />
-</div>
+            <NavBar/>
+            <Contact />
         </>
     )
 }

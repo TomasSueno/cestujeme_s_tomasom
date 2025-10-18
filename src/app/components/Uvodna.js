@@ -4,13 +4,13 @@ import '../styles/homepage.css'
 import Link from 'next/link'
 import { useEffect, useState, useRef } from 'react'
 import NavBar from './NavBar'
-import Head from 'next/head';
+import Head from 'next/head'
 import Image from 'next/image'
 import firstPhoto from '../resources/images/main_page_first_photo.jpg'
 import Form from "next/form"
-
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
+import { useRouter } from "next/navigation"
 
 
 export default function Uvodna () {
@@ -36,6 +36,8 @@ const [form, setForm] = useState({
 const today = new Date()
 const twoYearsLater = new Date()
 twoYearsLater.setFullYear(today.getFullYear() + 2)
+
+const formRouter = useRouter()
 
 function updateForm(field, value) {
     return setForm(prev => ({...prev, [field]: value}))
@@ -70,8 +72,6 @@ function updateFormArray(field, index, value) {
             }, 300)
          return () => clearTimeout(timeoutId)
     }, [form.concreteHotel])
-
-    console.log(hotelData)
 
     // check if search places input is focused 
     function checkToggleHotelsInput(isOpen) {
@@ -151,14 +151,26 @@ function updateFormArray(field, index, value) {
     }
 
     function handleSubmit(e) {
+        e.preventDefault();
         const errors = {}
         if(form.concreteHotel.length < 3) {errors.concreteHotelError = "Write at least 3 characters in the hotel search."}
         else if(!Array.isArray(hotelData) || hotelData.length === 0) errors.concreteHotelError = "That text doesn't match destination. Please try to find some other destination."
         if(form.dateRange[0] === null || form.dateRange[1] === null) errors.dateError = "Choose complete date."
         if(form.ageOfChild.slice(0, form.children).some((el) => el === null)) errors.ageOfChildError = "Add how old are your youngsters."
         setSubmitErrors(errors)
-        if(Object.keys(errors).length > 0) {
-            e.preventDefault();
+
+        if(Object.keys(errors).length === 0) {
+            const params = new URLSearchParams({
+                place: form.concreteHotel,
+                // select the concrete day, not all informations - toISOString().split('T')[0]
+                startDate: form.dateRange[0]?.toISOString().split('T')[0],
+                endDate: form.dateRange[1]?.toISOString().split('T')[0],
+                adultsCount: form.adults,
+                childCount: form.children,
+                childAge: form.ageOfChild.slice(0, form.children)
+            })
+            // formRouter.push(`/about_us?place=${form.concreteHotel}?date=${form.dateRange}?adultsCount=${form.adults}?childCount=${form.children}?childAge=${form.ageOfChild}`)
+            formRouter.push(`/searched_hotels?${params}`)
         }
         }
 
