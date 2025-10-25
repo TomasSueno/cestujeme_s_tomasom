@@ -43,13 +43,47 @@ main button {
   width: 100%;
   height: 50px;
   margin: 25px 0px 30px 0px;
-  text-align: center;
+  padding-left: 50px;
   font-size: 14px;
   border-radius: 6px;
   min-width: 180px;
   transition-duration: 0.25s;
   border: 1px solid rgba(255,255,255,0.3);
 }
+
+.datePickerDiv .react-datepicker-wrapper {
+  width: 100%;
+}
+
+.datePickerDiv input {
+  width: 100%;
+}
+
+
+
+.searchPlaceDiv,
+.datePickerDiv,
+.choosePeopleDiv {
+  position: relative;
+}
+
+.searchPlaceSpan,
+.datePickerSpan,
+.choosePeopleSpan {
+  position: absolute;
+  top: 48px;
+  transform: translate(0, -50%);
+  left: 10px;
+  z-index: 1;
+  pointer-events: none;
+  font-size: 20px;
+}
+
+.choosePeopleSpan {
+  margin-top: 3px;
+}
+
+
 
 .rezervation input:focus {
   outline: none;
@@ -205,6 +239,29 @@ main button {
   margin: -22px 0 7px 0;
   font-size: 0.9rem;
 }
+
+/* Why choose us section */
+.whyChooseUs {
+  margin-top: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #f9f9f9;
+  color: #1F2937;
+  justify-content: center;
+}
+
+.whyChooseUs div {
+  width: 250px;
+  margin: 20px 30px;
+  text-align: center;
+}
+
+.whyChooseUs div p {
+  padding-right: 20px;
+  padding-top: 12px;
+}
+
+
 
 @media only screen and (max-width: 1000px) {
 .bookingSection {

@@ -12,6 +12,11 @@ import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import { useRouter } from "next/navigation"
 
+import peopleIcon from "@/app/resources/images/people_icon.png"
+import offerDestinationsIcon from "@/app/resources/images/offer_destinations_con.png"
+import satisfiedPeople from "@/app/resources/images/satisfied_people.png"
+import experience from "@/app/resources/images/experience.png"
+import safety from "@/app/resources/images/safety.png"
 
 export default function Uvodna () {
 
@@ -69,7 +74,7 @@ function updateFormArray(field, index, value) {
             } finally {
                 setLoading(false)
             }
-            }, 300)
+            }, 2)
          return () => clearTimeout(timeoutId)
     }, [form.concreteHotel])
 
@@ -121,8 +126,9 @@ function updateFormArray(field, index, value) {
                 <button type='button' onClick={() => {
                     if(form.children > 0) {
                     updateForm("children", form.children - 1)
-                    updateFormArray("ageOfChild", form.children - 1, null)}
-                    }}>-</button>
+                    updateFormArray("ageOfChild", form.children - 1, null)
+                    if(submitErrors.ageOfChildError) setSubmitErrors(prev => ({...prev, ageOfChildError: null}))}}}
+                    >-</button>
                 <p>{children}</p>
                 <button type='button' onClick={() => updateForm("children", Math.min(5, form.children + 1))}>+</button>
             </div>
@@ -132,10 +138,13 @@ function updateFormArray(field, index, value) {
                 <div className="ageOfChild" key={count}>
                     <label>Age of child {count + 1}</label>
                     <select value={form.ageOfChild[count] || "Choose age"} 
-                    onChange={(e) => updateFormArray("ageOfChild", count, (e.target.value == "Choose age" ? null : e.target.value))}>
+                    onChange={(e) => {
+                        updateFormArray("ageOfChild", count, (e.target.value == "Choose age" ? null : e.target.value))
+                        if(submitErrors.ageOfChildError) setSubmitErrors(prev => ({...prev, ageOfChildError: null}))
+                        }
+                    }>
                         
                     <option>Choose age</option>
-                    {/* <option value={null}>Choose age</option> */}
                     <option key={0} value={0}>0 years</option>
                     {[...Array(17).keys()].map(age => (
                         <option key={age+1} value={age+1}>{(age + 1) + (age + 1 != 1 ? " years" : " year")}</option> 
@@ -151,6 +160,7 @@ function updateFormArray(field, index, value) {
     }
 
     function handleSubmit(e) {
+        setShowPeoplePicker(false)
         e.preventDefault();
         const errors = {}
         if(form.concreteHotel.length < 3) {errors.concreteHotelError = "Write at least 3 characters in the hotel search."}
@@ -195,26 +205,43 @@ return (
 
             {rezervationType == "accommodation" ? (
             <Form className="rezervation">
+            <div className="searchPlaceDiv">
+                <span className="searchPlaceSpan">🌍</span>
                 <input maxLength="100" minLength="0" className="searchPlaceInput" type="text" name="accommodation_place" value={form.concreteHotel} placeholder='Where to?'
                     onFocus={() => checkToggleHotelsInput(true)}
                     onBlur={() => checkToggleHotelsInput(false)}
                     onChange={(event) => { 
-                    updateForm("concreteHotel", event.target.value)}
+                    updateForm("concreteHotel", event.target.value)
+                    if(submitErrors.concreteHotelError) setSubmitErrors(prev => ({ ...prev, concreteHotelError: null }))
+                }
                     }></input>
                 {submitErrors.concreteHotelError && <p className="submitErrorAnnouncment">{submitErrors.concreteHotelError}</p>}
                 {
                 <HotelSuggestions hotels={hotelData} selectHotel={changeHotelInputText} closeDropdowns={() => checkToggleHotelsInput(false)} inputValue={form.concreteHotel} loading={loading} inputFocus={toggleHotelsInput} />
                 }
-
+                </div>
+                
+                <div className="datePickerDiv">
+                <span className="datePickerSpan">🗓️</span>
                 <DatePicker placeholderText="Departing - Returning" className="datePicker" name="date_picker"
-                monthsShown={2} selected={form.dateRange[0]} onChange={(update) => updateForm("dateRange", update)}
-                startDate={form.dateRange[0]} endDate={form.dateRange[1]} selectsRange minDate={today} maxDate={twoYearsLater}/>
+                monthsShown={2} selected={form.dateRange[0]} onChange={(update) => {
+                    updateForm("dateRange", update)
+                    if(submitErrors.dateError) setSubmitErrors(prev => ({...prev, dateError: null}))
+                    }
+                }
+                startDate={form.dateRange[0]} endDate={form.dateRange[1]} selectsRange minDate={today} maxDate={twoYearsLater} />
                 {submitErrors.dateError && <p className="submitErrorAnnouncment">{submitErrors.dateError}</p>}
+                </div>
 
-                <input value={"Adults = " + form.adults + " and " + "Children = " + form.children} className="choosePeopleInput" 
+                <div className="choosePeopleDiv">
+                <span className="choosePeopleSpan"><Image src={peopleIcon} height={24} width={24} alt="people"></Image></span>
+                <input value={form.adults + (form.adults !== 1 ? " adults, " : " adult, ") + form.children + (form.children !== 1 ? " childs" : " child")} className="choosePeopleInput" 
                 onFocus={() => setShowPeoplePicker(true)} readOnly name="people_count"></input>
                 <PeoplePicker children={form.children} adults={form.adults}/>
                 {submitErrors.ageOfChildError && <p className="submitErrorAnnouncment">{submitErrors.ageOfChildError}</p>}
+                </div>
+
+                
                 <button type='submit' className="rezervation_button" onClick={handleSubmit}>Find your hotel</button>
             </Form>
 
@@ -227,6 +254,29 @@ return (
                 <button className="rezervation_button">Find your tour</button>
             </div> 
             ) : null }
+    </section>
+
+    <section className="whyChooseUs">
+        <div>
+            <Image src={offerDestinationsIcon} height={200} width={200} alt="globe"></Image>
+            <p>We have wide range of destinations - more than 30.</p>
+        </div>
+
+        <div>
+            <Image src={satisfiedPeople} height={200} width={200} alt="Satisfied people"></Image>
+            <p>Up to 0 satisfied travelers.</p>
+        </div>
+
+        <div>
+            <Image src={experience} height={200} width={200} alt="Experience"></Image>
+            <p>Long-term experiences - more than 6 months.</p>
+        </div>
+
+        <div>
+            <Image src={safety} height={200} width={200} alt="Safety"></Image>
+            <p>100% safety with Tomas.</p>
+        </div>
+
     </section>
 
     {/* <section>

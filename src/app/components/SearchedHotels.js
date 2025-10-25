@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { Suspense } from "react"
+import { useEffect, useState } from "react"
 
 export default function SearchedHotels() {
     const searchParams = useSearchParams()
@@ -16,16 +16,13 @@ export default function SearchedHotels() {
 
     return (
         <>
-        <Suspense fallback={<p>Loading...</p>}>
             <p>{place}</p>
             <p>{startDate}</p>
             <p>{endDate}</p>
             <p>{adultsCount}</p>
             <p>{childCount}</p>
-            <p>{childAge}</p>
+            <p>{childAge}</p> 
             <Link href="/">Lets find the hotel with these parameters</Link>          
-        </Suspense>
-
         </>
     )
 }
