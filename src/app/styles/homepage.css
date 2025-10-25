@@ -1,3 +1,7 @@
+body {
+ background: linear-gradient(135deg, #f5f7fa 0%, #e9ecfa 100%);
+}
+
 main button {
   cursor: pointer;
 }
@@ -253,12 +257,12 @@ main button {
 .whyChooseUs div {
   width: 250px;
   margin: 20px 30px;
-  text-align: center;
 }
 
 .whyChooseUs div p {
-  padding-right: 20px;
+  width: 200px;
   padding-top: 12px;
+  text-align: center;
 }
 
 
