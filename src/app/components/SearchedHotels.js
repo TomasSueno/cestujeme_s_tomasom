@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 
 export default function SearchedHotels() {
-    const searchParams = useSearchParams()
+    // const searchParams = useSearchParams()
 
     // const place = searchParams.get("place")
     // const startDate = searchParams.get("startDate")
